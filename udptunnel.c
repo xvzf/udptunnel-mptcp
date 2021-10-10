@@ -217,7 +217,7 @@ static void parse_args(int argc, char *argv[], struct relay **relays,
     (*relays)[i].udpaddr.sin_port = htons(udpport + i);
     (*relays)[i].udpaddr.sin_family = AF_INET;
     (*relays)[i].udp_ttl = udpttl;
-    (*relays)[i].multicast_udp = IN_MULTICAST(htons(udpaddr.s_addr));
+    (*relays)[i].multicast_udp = IN_MULTICAST(htonl(udpaddr.s_addr));
 
     (*relays)[i].tcpaddr.sin_addr = tcpaddr;
     (*relays)[i].tcpaddr.sin_port = htons(tcpport + i);
