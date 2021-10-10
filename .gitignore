@@ -3,3 +3,6 @@ Makefile
 *.log
 *.status
 *.o
+pkg/
+src/udptunnel
+*.zst

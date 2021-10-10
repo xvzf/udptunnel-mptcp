@@ -1,5 +1,8 @@
 # UDPTunnel with MPTCP
 
+This patches the original udptunnel by lennox to allow multipath TCP connections.
+It also includes an ArchLinux package build script.
+
 
 ## Original Readme
 
