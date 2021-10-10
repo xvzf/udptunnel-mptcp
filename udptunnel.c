@@ -344,7 +344,7 @@ static void setup_server_listen(struct relay *relay)
   int opt;
 
   /* Create TCP listening socket. */
-  if ((relay->tcp_listen_sock = socket(PF_INET, SOCK_STREAM, 0)) < 0) {
+  if ((relay->tcp_listen_sock = socket(PF_INET, SOCK_STREAM, IPPROTO_MPTCP)) < 0) {
     perror("setup_server_listen: socket");
     exit(1);
   }
@@ -452,7 +452,7 @@ static void await_incoming_connections(struct relay *relays, int relay_count)
 static void setup_tcp_client(struct relay *relay)
 {
   /* Create TCP socket. */
-  if ((relay->tcp_sock = socket(PF_INET, SOCK_STREAM, 0)) < 0) {
+  if ((relay->tcp_sock = socket(PF_INET, SOCK_STREAM, IPPROTO_MPTCP)) < 0) {
     perror("setup_tcp_client: socket");
     exit(1);
   }
