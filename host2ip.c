@@ -6,6 +6,8 @@
 #include <arpa/inet.h>       /* inet_addr() */
 #include <rpcsvc/ypclnt.h>   /* YP */
 #include <ctype.h>           /* isspace() */
+#include <string.h>          /* strlen() */
+
 
 #include "host2ip.h"
 
