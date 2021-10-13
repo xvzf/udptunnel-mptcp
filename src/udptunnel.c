@@ -45,6 +45,7 @@ struct relay {
   int udp_recv_sock;
   int tcp_listen_sock;
   int tcp_sock;
+  int send_only;
 
   char buf[TCPBUFFERSIZE];
   char *buf_ptr, *packet_start;
@@ -222,6 +223,13 @@ static void parse_args(int argc, char *argv[], struct relay **relays,
     (*relays)[i].tcpaddr.sin_addr = tcpaddr;
     (*relays)[i].tcpaddr.sin_port = htons(tcpport + i);
     (*relays)[i].tcpaddr.sin_family = AF_INET;
+
+    // Simple BiDi logic
+    if (*is_server) {
+      (*relays)[i].send_only = i == 0
+    } else {
+      (*relays)[i].send_only = i == 1
+    }
   }
 } /* parse_args */
 
@@ -234,6 +242,11 @@ static void setup_udp_recv(struct relay *relay)
 {
   int opt;
   struct sockaddr_in udp_recv_addr;
+
+  // In case this is a send only, don't setup any sockets
+  if(relay->send_only) {
+    return;
+  }
 
   if ((relay->udp_recv_sock = socket(PF_INET, SOCK_DGRAM, 0)) < 0) {
     perror("setup_udp_recv: socket");
@@ -625,7 +638,7 @@ int main(int argc, char *argv[])
       if (FD_ISSET(relays[i].tcp_sock, &readfds)) {
         ok += tcp_to_udp(&relays[i]);
       }
-      if (FD_ISSET(relays[i].udp_recv_sock, &readfds)) {
+      if (!relays[i].send_only && FD_ISSET(relays[i].udp_recv_sock, &readfds)) {
         ok += udp_to_tcp(&relays[i]);
       }
     }
